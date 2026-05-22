@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Video Player</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      background: #0d0d0d;
+      color: #f0f0f0;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 24px;
+    }
+
+    .player-wrapper {
+      width: 100%;
+      max-width: 960px;
+      background: #1a1a1a;
+      border-radius: 16px;
+      overflow: hidden;
+      box-shadow: 0 24px 64px rgba(0,0,0,0.6);
+    }
+
+    .title-bar {
+      padding: 16px 24px;
+      background: #111;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      border-bottom: 1px solid #2a2a2a;
+    }
+
+    .title-bar .dot {
+      width: 12px; height: 12px;
+      border-radius: 50%;
+    }
+    .dot.red   { background: #ff5f57; }
+    .dot.yellow{ background: #febc2e; }
+    .dot.green { background: #28c840; }
+
+    .title-bar span {
+      margin-left: auto;
+      font-size: 13px;
+      color: #666;
+      letter-spacing: 0.03em;
+    }
+
+    video {
+      width: 100%;
+      display: block;
+      background: #000;
+      max-height: 72vh;
+    }
+
+    .meta {
+      padding: 14px 24px;
+      font-size: 13px;
+      color: #555;
+      border-top: 1px solid #222;
+    }
+  </style>
+</head>
+<body>
+  <div class="player-wrapper">
+    <div class="title-bar">
+      <div class="dot red"></div>
+      <div class="dot yellow"></div>
+      <div class="dot green"></div>
+      <span>1.mp4</span>
+    </div>
+
+    <video
+      id="vid"
+      controls
+      preload="metadata"
+      src="../uploads/1.mp4"
+    >
+      Your browser does not support the video tag.
+    </video>
+
+    <div class="meta" id="meta">Loading video info…</div>
+  </div>
+
+  <script>
+    const vid = document.getElementById('vid');
+    const meta = document.getElementById('meta');
+
+    vid.addEventListener('loadedmetadata', () => {
+      const dur = vid.duration;
+      const mins = Math.floor(dur / 60);
+      const secs = Math.floor(dur % 60).toString().padStart(2, '0');
+      const w = vid.videoWidth, h = vid.videoHeight;
+      meta.textContent = `Duration: ${mins}:${secs}  ·  Resolution: ${w} × ${h}`;
+    });
+
+    vid.addEventListener('error', () => {
+      meta.textContent = 'Could not load video. Make sure this HTML file stays in the same folder it was saved to.';
+    });
+  </script>
+</body>
+</html>
